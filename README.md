@@ -24,7 +24,7 @@ The memory and CPU limitations of the RPi B required for the bare minimum softwa
 - ssh
 - Command line usage. I used `bash`.
 - Intallation of packages through `apt`
-- Editing files. Although I use `vim`, everything can be made using `nano`, that comes already installed.
+- Editing files.
 - A basic knowledge of:
   - `systemd` and `systemctl`.
   - `bluetoothctl`
@@ -84,11 +84,8 @@ As the server won't have  a display, I used Raspbian Buster Lite.
 - As I will always connect to the server from the same machine, I added the IP address to `/etc/hosts`.
   I also  added my computer public key to the list of authorized keys.
   That way I can connect without entering the password to the RPi by doing: `ssh pi@player`
-  - In the local machine
-    ```
-	sudo nano /etc/hosts
-    ```
-    add a line like
+  - In the local machine, edit `/etc/hosts`. You will need to use `sudo` because the file cannot be written by regular users.
+    Add a line like:
     ```
     {your-RPi-ip-address}    player  # Raspberry Pi B (Eth)
     ```
@@ -103,16 +100,13 @@ As the server won't have  a display, I used Raspbian Buster Lite.
     {Paste your public key. It's usually ~/.ssh/id_dsa.pub}
     Ctrl-D
     ```
-- Use an in-memory file systems for frequently written directories.
-  Storing temporary files on the SD card is not only slow but in the long term, degrades the SD card (the available space decreases).
+- Storing temporary files in the SD card is not only slow but, in the long term, degrades the card (the available space decreases).
   A solution is to mount an in-memory filesystem (`tmpfs`) using part of the available RAM.
   The most written directories are `/var/cache` (by far) and `/var/log` (not as much as I expected).
-  Become `root` again and add the following lines to `/etc/fstab`
+  Therefore, become `root` again and add the following lines to `/etc/fstab`:
   ```
-  cat >> /etc/fstab <<END
-tmpfs       /var/cache  tmpfs   defaults,noatime,nosuid,size=70m    0   0
-tmpfs       /var/log    tmpfs   defaults,noatime,nosuid,size=5m 0   0
-END
+  tmpfs       /var/cache  tmpfs   defaults,noatime,nosuid,size=70m    0   0
+  tmpfs       /var/log    tmpfs   defaults,noatime,nosuid,size=5m 0   0
   ```
   Remove whatever is in `var/cache` because it will be hidden by the mounted system.
   ```
