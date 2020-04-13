@@ -34,7 +34,7 @@ The memory and CPU limitations of the RPi B required for the bare minimum softwa
   
 ## Architecture
   
-
+![Server Architecture](Architecture-UPnP-Bluetooth-music-player.png)
 
 ## Installation steps
 
